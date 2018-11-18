@@ -1,4 +1,4 @@
-package com.ucatolica.clustering_microservice_api;
+package co.edu.ucatolica.clustering.microservice.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.ucatolica.clustering_microservice_api.service;
+package co.edu.ucatolica.clustering.microservice.api.service;
 
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.RList;

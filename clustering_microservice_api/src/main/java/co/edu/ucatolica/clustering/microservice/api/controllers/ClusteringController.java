@@ -1,4 +1,4 @@
-package com.ucatolica.clustering_microservice_api.controllers;
+package co.edu.ucatolica.clustering.microservice.api.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
