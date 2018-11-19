@@ -13,7 +13,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-@Configuration
+//@Configuration
 public class MongoConfig {
 
 	@Value("${spring.data.mongodb.host}")
@@ -24,7 +24,7 @@ public class MongoConfig {
 	private String authenticationDB;
 	@Value("${spring.data.mongodb.database}")
 	private String database;
-	@Value("${spring.data.mongodb.usernam}")
+	@Value("${spring.data.mongodb.username}")
 	private String user;
 	@Value("${spring.data.mongodb.password}")
 	private String password;
