@@ -13,7 +13,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-//@Configuration
+@Configuration
 public class MongoConfig {
 
 	@Value("${spring.data.mongodb.host}")

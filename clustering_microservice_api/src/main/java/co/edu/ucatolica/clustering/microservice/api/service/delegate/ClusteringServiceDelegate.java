@@ -19,7 +19,7 @@ import co.edu.ucatolica.clustering.microservice.api.model.ClusteringHIERARCHICAL
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringKMEANSResponse;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringPAMResponse;
 import co.edu.ucatolica.clustering.microservice.api.model.RserveResponse;
-import co.edu.ucatolica.clustering.microservice.api.util.ClusteringAlgorithmStrategyBuilder;
+import co.edu.ucatolica.clustering.microservice.api.util.ClusteringAlgorithmStrategyProvider;
 
 /**
  * Delegado que actua como fachada que contiene todos los servicios relacionados al Clustering
@@ -40,7 +40,7 @@ public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate
 	 * La fábrica de algoritmos de clustering
 	 */
 	@Autowired
-	private ClusteringAlgorithmStrategyBuilder algorithmStrategyFactory;
+	private ClusteringAlgorithmStrategyProvider algorithmStrategyFactory;
 
 	/**
 	 * Obtiene todos los metodos de clustering
@@ -113,12 +113,12 @@ public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate
 	 * @param execData los datos de la colleccion de ejecuciones
 	 */
 	@Async
-	private void asyncExecClusteringAlgorithm(ClusteringData data, ClusteringExecData execData) {
+	public void asyncExecClusteringAlgorithm(ClusteringData data, ClusteringExecData execData) {
 		
 		RserveResponse response = new RserveResponse();
 		
 		try {
-			response = algorithmStrategyFactory.getClusteringAlgorithmFactory()
+			response = algorithmStrategyFactory.getProvider()
 					.get(data.getClusteringType())
 					.runAlgorithm(rserveRequestBuilder.buildRequest(data));
 		} catch (Exception e) {

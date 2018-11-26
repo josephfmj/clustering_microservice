@@ -11,7 +11,7 @@ import co.edu.ucatolica.clustering.microservice.api.constants.ClusteringMethods;
 import co.edu.ucatolica.clustering.microservice.api.service.IClusteringAlgorithm;
 
 @Component
-public class ClusteringAlgorithmStrategyBuilder {
+public class ClusteringAlgorithmStrategyProvider {
 
 	private Map<String, RunClusteringAlgorithm> clusteringAlgorithmFactory;
 
@@ -24,7 +24,7 @@ public class ClusteringAlgorithmStrategyBuilder {
 	private IClusteringAlgorithm hierarchical;
 
 	@Autowired
-	public ClusteringAlgorithmStrategyBuilder(@Qualifier("kmeans") IClusteringAlgorithm kmeans,
+	public ClusteringAlgorithmStrategyProvider(@Qualifier("kmeans") IClusteringAlgorithm kmeans,
 			@Qualifier("pam") IClusteringAlgorithm pam, @Qualifier("clara") IClusteringAlgorithm clara,
 			@Qualifier("hierarchical") IClusteringAlgorithm hierarchical) {
 		
@@ -37,7 +37,7 @@ public class ClusteringAlgorithmStrategyBuilder {
 
 	}
 
-	public Map<String, RunClusteringAlgorithm> getClusteringAlgorithmFactory() {
+	public Map<String, RunClusteringAlgorithm> getProvider() {
 		return clusteringAlgorithmFactory;
 	}
 
