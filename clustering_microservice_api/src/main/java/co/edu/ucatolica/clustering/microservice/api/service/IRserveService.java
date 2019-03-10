@@ -1,14 +1,19 @@
 package co.edu.ucatolica.clustering.microservice.api.service;
 
 import org.rosuda.REngine.REXP;
-import org.rosuda.REngine.RList;
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.Rserve.RserveException;
 
 public interface IRserveService {
 	
-	public void connectToRserve();
+	public IRserveService connectToRserve();
 	
-	public REXP createDataFrame(RList list, String[] rownames);
+	public IRserveService attachedRScript(String source) throws RserveException;
 	
-	public String executeRMethod(REXP dataframe);
+	public IRserveService assignDataFrame(String dataFrameName, REXP dataFrame) throws RserveException;
+	
+	public IRserveService assignVariables(String assign) throws RserveException;
+	
+	public String executeRMethod(String method) throws RserveException, REXPMismatchException;
 
 }

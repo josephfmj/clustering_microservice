@@ -1,16 +1,24 @@
 package co.edu.ucatolica.clustering.microservice.api.model;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+/**
+ * @author Josseph
+ *
+ */
 public class ClusteringData {
 	
 	@Id
 	private ObjectId id;
 	
-	private String clusteringType;
+	private Date date_data;
 	
-	private String name;
+	private Map<String,List<String>> data_frame;
 
 	
 	public ObjectId getId() {
@@ -21,20 +29,23 @@ public class ClusteringData {
 		this.id = id;
 	}
 
-	public String getClusteringType() {
-		return clusteringType;
+	public Date getDate_data() {
+		return date_data;
 	}
 
-	public void setClusteringType(String clusteringType) {
-		this.clusteringType = clusteringType;
+	public void setDate_data(Date date_data) {
+		this.date_data = date_data;
 	}
 
-	public String getName() {
-		return name;
+	public Map<String, List<String>> getData_frame() {
+		return data_frame;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setData_frame(Map<String, List<String>> data_frame) {
+		this.data_frame = data_frame;
 	}
+	
+	
+	
 
 }

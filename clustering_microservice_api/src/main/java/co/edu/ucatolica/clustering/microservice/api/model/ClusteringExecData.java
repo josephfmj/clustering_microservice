@@ -8,7 +8,7 @@ public class ClusteringExecData {
 	@Id
 	private ObjectId id;
 	private String dataId;
-	private RserveResponse response;
+	private RserveResponse result;
 	public ObjectId getId() {
 		return id;
 	}
@@ -22,10 +22,10 @@ public class ClusteringExecData {
 		this.dataId = dataId;
 	}
 	public RserveResponse getResponse() {
-		return response;
+		return result;
 	}
-	public void setResponse(RserveResponse response) {
-		this.response = response;
+	public void setResponse(RserveResponse result) {
+		this.result = result;
 	}
 	
 	

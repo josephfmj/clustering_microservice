@@ -1,6 +1,9 @@
 package co.edu.ucatolica.clustering.microservice.api.constants;
 
-public enum ClusteringDIANAParams {
+public enum ClusteringAlgorithmsConstants {
 	
-	DIANA;
+	METHOD_NAME,
+	
+	TYPE;
+
 }

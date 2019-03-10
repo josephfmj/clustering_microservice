@@ -5,6 +5,7 @@
  */
 package co.edu.ucatolica.clustering.microservice.api.service.delegate;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import co.edu.ucatolica.clustering.microservice.api.model.ClusterMethodConfig;
-import co.edu.ucatolica.clustering.microservice.api.model.ClusteringCLARAResponse;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringData;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringExecData;
-import co.edu.ucatolica.clustering.microservice.api.model.ClusteringHIERARCHICALResponse;
-import co.edu.ucatolica.clustering.microservice.api.model.ClusteringKMEANSResponse;
-import co.edu.ucatolica.clustering.microservice.api.model.ClusteringPAMResponse;
+import co.edu.ucatolica.clustering.microservice.api.model.ClusteringExecutionRequest;
 import co.edu.ucatolica.clustering.microservice.api.model.RserveResponse;
 import co.edu.ucatolica.clustering.microservice.api.util.ClusteringAlgorithmStrategyProvider;
 
@@ -36,11 +34,15 @@ public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate
 	 */
 	private static final String SEPARATOR="_";
 	
+	private ClusteringExecutionRequest requestData;
+	
+	private ClusteringExecData execData;
+	
 	/**
 	 * La fábrica de algoritmos de clustering
 	 */
 	@Autowired
-	private ClusteringAlgorithmStrategyProvider algorithmStrategyFactory;
+	private ClusteringAlgorithmStrategyProvider algorithmStrategyProvider;
 
 	/**
 	 * Obtiene todos los metodos de clustering
@@ -57,73 +59,40 @@ public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate
 	 * @param data los Datos de la ejecucion 
 	 * @return el Id de la colleccion donde se guardan las ejecuciones
 	 */
-	public String exceClustering(ClusteringData data) {
+	public String prepareClusteringExec(ClusteringExecutionRequest request) {
 		
-		ClusteringExecData execData = new ClusteringExecData();
+		this.requestData=request;
+		execData = new ClusteringExecData();
+		ClusteringData data = new ClusteringData();
+		data.setDate_data(new Date());
+		data.setData_frame(request.getData_frame());
 		ClusteringData savedData=dataRepository.save(data);
 		execData.setDataId(savedData.getId().toString());
 		execData = excutionRepository.save(execData);
-		asyncExecClusteringAlgorithm(data, execData);
 		
-		return data.getClusteringType()+SEPARATOR+execData.getId().toString();
+		return request.getName()+SEPARATOR+execData.getId().toString();
 		
 		
 	}
 	
 	/**
-	 * Retorna el modelo correspondiente a la respuesta de la ejecucion de Kmeans
+	 * Retorna los datos de una ejecucion previa
 	 * @param Id el id de la ejecucion
-	 * @return ClusteringKMEANSResponse
+	 * @return ClusteringExecData
 	 */
-	public ClusteringKMEANSResponse getKmeansExecution(String Id) {
-		return kmeansResponseMapper.convert(excutionRepository.findById(Id).map(x -> x).orElse(null));
-	}
+	public ClusteringExecData getKmeansExecution(String Id) {
+		
+		return excutionRepository.findById(Id)
+				.map(x -> x)
+				.orElse(null);
+	}	
 	
-	/**
-	 * Retorna el modelo correspondiente a la respuesta de la ejecucion de Pam
-	 * @param Id el id de la ejecucion
-	 * @return ClusteringPAMResponse
-	 */
-	public ClusteringPAMResponse getPamExecution(String Id) {
-		return pamResponseMapper.convert(excutionRepository.findById(Id).map(x -> x).orElse(null));
-	}
-	
-	/**
-	 * Retorna el modelo correspondiente a la respuesta de la ejecucion de Hierarchical
-	 * @param Id el id de la ejecucion
-	 * @return ClusteringHIERARCHICALResponse
-	 */
-	public ClusteringHIERARCHICALResponse getHierarchicalExecution(String Id) {
-		return hierarchicalResponseMapper.convert(excutionRepository.findById(Id).map(x -> x).orElse(null));
-	}
-	
-	/**
-	 * Retorna el modelo correspondiente a la respuesta de la ejecucion de Clara
-	 * @param Id el id de la ejecucion
-	 * @return ClusteringCLARAResponse
-	 */
-	public ClusteringCLARAResponse getClaraExecution(String Id) {
-		return claraResponseMapper.convert(excutionRepository.findById(Id).map(x -> x).orElse(null));
-	}
-	
-	/**
-	 * Metodo Asincrono que ejecuta el algoritmo de clustering 
-	 * selecciona, actualiza la colleccion de ejecuciones
-	 * @param data los Datos de la ejecucion 
-	 * @param execData los datos de la colleccion de ejecuciones
-	 */
 	@Async
-	public void asyncExecClusteringAlgorithm(ClusteringData data, ClusteringExecData execData) {
+	public void asyncExecClusteringAlgorithm() {
 		
-		RserveResponse response = new RserveResponse();
-		
-		try {
-			response = algorithmStrategyFactory.getProvider()
-					.get(data.getClusteringType())
-					.runAlgorithm(rserveRequestBuilder.buildRequest(data));
-		} catch (Exception e) {
-			response.setDescription("Error en la ejecución");
-		}
+		RserveResponse response = algorithmStrategyProvider.getProvider()
+				.get(requestData.getName())
+				.runAlgorithm(rserveRequestBuilder.buildRequest(requestData));
 		
 		execData.setResponse(response);
 		excutionRepository.save(execData);

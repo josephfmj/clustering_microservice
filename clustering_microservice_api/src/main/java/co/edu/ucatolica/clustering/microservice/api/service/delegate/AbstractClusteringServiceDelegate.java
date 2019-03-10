@@ -7,10 +7,6 @@ package co.edu.ucatolica.clustering.microservice.api.service.delegate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import co.edu.ucatolica.clustering.microservice.api.mapper.ClaraResponseMapper;
-import co.edu.ucatolica.clustering.microservice.api.mapper.HierarchicalResponseMapper;
-import co.edu.ucatolica.clustering.microservice.api.mapper.KmeansResponseMapper;
-import co.edu.ucatolica.clustering.microservice.api.mapper.PamResponseMapper;
 import co.edu.ucatolica.clustering.microservice.api.repository.ClusterMethodConfigRepository;
 import co.edu.ucatolica.clustering.microservice.api.repository.ClusteringDataRepository;
 import co.edu.ucatolica.clustering.microservice.api.repository.ClusteringExecutionRepository;
@@ -48,29 +44,5 @@ public abstract class AbstractClusteringServiceDelegate {
 	 */
 	@Autowired
 	protected RServeRequestBuilder rserveRequestBuilder;
-	
-	/**
-	 * El mapper para el modelo de respuesta de clara
-	 */
-	@Autowired
-	protected ClaraResponseMapper claraResponseMapper;
-	
-	/**
-	 * El mapper para el modelo de respuesta de hierarchical
-	 */
-	@Autowired
-	protected HierarchicalResponseMapper hierarchicalResponseMapper;
-	
-	/**
-	 * El mapper para el modelo de respuesta de kmeans
-	 */
-	@Autowired
-	protected KmeansResponseMapper kmeansResponseMapper;
-	
-	/**
-	 * El mapper para el modelo de respuesta de pam
-	 */
-	@Autowired
-	protected PamResponseMapper pamResponseMapper;
 
 }

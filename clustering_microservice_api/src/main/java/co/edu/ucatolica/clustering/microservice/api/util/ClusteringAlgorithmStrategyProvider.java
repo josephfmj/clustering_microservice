@@ -84,12 +84,16 @@ public class ClusteringAlgorithmStrategyProvider {
 	private void build() {
 
 		clusteringAlgorithmFactory = new HashMap<>();
+		
 		clusteringAlgorithmFactory.put(ClusteringMethods.KMEANS.toString(),
 				(r) -> kmeans.execClusteringMethod(r));
+		
 		clusteringAlgorithmFactory.put(ClusteringMethods.PAM.toString(), 
 				(r) -> pam.execClusteringMethod(r));
+		
 		clusteringAlgorithmFactory.put(ClusteringMethods.CLARA.toString(), 
 				(r) -> clara.execClusteringMethod(r));
+		
 		clusteringAlgorithmFactory.put(ClusteringMethods.HIERARCHICAL.toString(),
 				(r) -> hierarchical.execClusteringMethod(r));
 
