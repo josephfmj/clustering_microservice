@@ -15,7 +15,13 @@ public class RserveResponse {
 		
 		private String description;
 		
-		public Builder(){
+		private Builder(){
+			
+		}
+		
+		public static Builder newInstance() {
+			
+			return new Builder();
 			
 		}
 		

@@ -5,19 +5,9 @@ import java.util.Map;
 
 public class ClusteringExecutionRequest {
 	
-	private String name;
-	
 	private Map<String,String> params;
 	
 	private Map<String,List<String>> data_frame;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Map<String, String> getParams() {
 		return params;

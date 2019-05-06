@@ -6,18 +6,20 @@
 package co.edu.ucatolica.clustering.microservice.api.service.delegate;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import co.edu.ucatolica.clustering.microservice.api.model.ClusterMethodConfig;
+import co.edu.ucatolica.clustering.microservice.api.constants.ClusteringAlgorithmsConstants;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringData;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringExecData;
 import co.edu.ucatolica.clustering.microservice.api.model.ClusteringExecutionRequest;
 import co.edu.ucatolica.clustering.microservice.api.model.RserveResponse;
+import co.edu.ucatolica.clustering.microservice.api.repository.ClusteringDataRepository;
+import co.edu.ucatolica.clustering.microservice.api.repository.ClusteringExecutionRepository;
 import co.edu.ucatolica.clustering.microservice.api.util.ClusteringAlgorithmStrategyProvider;
+import co.edu.ucatolica.clustering.microservice.api.util.RServeRequestBuilder;
 
 /**
  * Delegado que actua como fachada que contiene todos los servicios relacionados al Clustering
@@ -27,30 +29,55 @@ import co.edu.ucatolica.clustering.microservice.api.util.ClusteringAlgorithmStra
  * 
  */
 @Service
-public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate {
+public class ClusteringServiceDelegate {
 	
 	/**
-	 * Separador para el Id de retorno
+	 * Repositorio de ClusteringData
 	 */
-	private static final String SEPARATOR="_";
+	private ClusteringDataRepository dataRepository;
 	
-	private ClusteringExecutionRequest requestData;
+	/**
+	 * Repositorio de ClusteringExecData
+	 */
+	private ClusteringExecutionRepository excutionRepository;
 	
-	private ClusteringExecData execData;
+	/**
+	 * Servicio para construir la peticion para Rserve
+	 */
+	private RServeRequestBuilder rserveRequestBuilder;
 	
 	/**
 	 * La fábrica de algoritmos de clustering
 	 */
-	@Autowired
 	private ClusteringAlgorithmStrategyProvider algorithmStrategyProvider;
-
+	
 	/**
-	 * Obtiene todos los metodos de clustering
-	 * @return la lista con los metodos de clustering
+	 * Peticion de ejecucion de clustering
 	 */
-	public List<ClusterMethodConfig> getClusteringMethods(){
+	private ClusteringExecutionRequest requestData;
+	
+	/**
+	 * Datos de ejecucion 
+	 */
+	private ClusteringExecData execData;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param dataRepository el repositorio de ClusteringData
+	 * @param excutionRepository el repositorio de ClusteringExecData
+	 * @param rserveRequestBuilder el servicio para construir la peticion para Rserve
+	 * @param algorithmStrategyProvider la fábrica de algoritmos de clustering
+	 */
+	@Autowired
+	public ClusteringServiceDelegate(ClusteringDataRepository dataRepository,
+			ClusteringExecutionRepository excutionRepository, RServeRequestBuilder rserveRequestBuilder,
+			ClusteringAlgorithmStrategyProvider algorithmStrategyProvider){
 		
-		return methodConfigRepository.findAll();
+		this.dataRepository = dataRepository;
+		this.excutionRepository = excutionRepository;
+		this.rserveRequestBuilder = rserveRequestBuilder;
+		this.algorithmStrategyProvider = algorithmStrategyProvider;
 		
 	}
 	
@@ -70,28 +97,17 @@ public class ClusteringServiceDelegate extends AbstractClusteringServiceDelegate
 		execData.setDataId(savedData.getId().toString());
 		execData = excutionRepository.save(execData);
 		
-		return request.getName()+SEPARATOR+execData.getId().toString();
+		return execData.getId().toString();
 		
 		
 	}
 	
-	/**
-	 * Retorna los datos de una ejecucion previa
-	 * @param Id el id de la ejecucion
-	 * @return ClusteringExecData
-	 */
-	public ClusteringExecData getKmeansExecution(String Id) {
-		
-		return excutionRepository.findById(Id)
-				.map(x -> x)
-				.orElse(null);
-	}	
 	
 	@Async
 	public void asyncExecClusteringAlgorithm() {
 		
 		RserveResponse response = algorithmStrategyProvider.getProvider()
-				.get(requestData.getName())
+				.get(requestData.getParams().get(ClusteringAlgorithmsConstants.METHOD_NAME.name()))
 				.runAlgorithm(rserveRequestBuilder.buildRequest(requestData));
 		
 		execData.setResponse(response);

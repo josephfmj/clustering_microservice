@@ -1,15 +1,72 @@
 package co.edu.ucatolica.clustering.microservice.api.constants;
 
+
+/**
+ * Parametros del metodo KMEANS
+ * 
+ * @author Joseph Rubio
+ * @version
+ * @since
+ */
 public enum ClusteringKMEANSParams {
 	
-	KMEANS,
+	/**
+	 * Nombre del metodo
+	 */
+	KMEANS("KMEANS"),
 	
-	CENTERS,
+	/**
+	 * Nombre de la vatiable data frame en el R script
+	 */
+	DATA_FRAME_VARIABLE("dfv"),
 	
-	ITER_MAX,
+	/**
+	 * Numero de centros
+	 */
+	CENTERS("centers"),
 	
-	N_START,
+	/**
+	 * Iteraciones maximas
+	 */
+	ITER_MAX("iter_max"),
 	
-	DISTANCE_MEASURE;
+	/**
+	 * Iteraciones iniciales
+	 */
+	N_START("nstart"),
+	
+	/**
+	 * Medida de distancia
+	 */
+	DISTANCE_MEASURE("distance_methods");
+	
+	/**
+	 * Valor del parametro
+	 */
+	private String value;
+	
+	/**
+	 * Constructor del Enum
+	 * @param value el valor
+	 */
+	private ClusteringKMEANSParams(String value) {
+		this.value = value;
+	}
+
+	/**
+	 * Retorna el valor
+	 * @return el valor
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * Establece el valor
+	 * @param value el valor
+	 */
+	public void setValue(String value) {
+		this.value = value;
+	}
 
 }

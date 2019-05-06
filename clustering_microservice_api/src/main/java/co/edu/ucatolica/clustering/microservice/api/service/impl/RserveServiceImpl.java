@@ -22,16 +22,6 @@ public class RserveServiceImpl implements IRserveService {
 	private static Logger LOGGER = LoggerFactory.getLogger(RserveServiceImpl.class);
 	
 	/**
-	 * Caracteres de reemplazo para invocar el comando source de R
-	 */
-	private static String REPLACE_TO_CHARS = "\\\\";
-	
-	/**
-	 * Caracteres originalers a reemplazar para usar el comando source de R
-	 */
-	private static String REPLACE_CHARS = "\\";
-	
-	/**
 	 * Conexiòn con RServe
 	 */
 	private RConnection rServerconnection;
@@ -73,7 +63,7 @@ public class RserveServiceImpl implements IRserveService {
 	@Override
 	public IRserveService attachedRScript(String source) throws RserveException {
 		
-		rServerconnection.eval(source.replace(REPLACE_CHARS, REPLACE_TO_CHARS));
+		rServerconnection.eval(source);
 		return this;
 	}
 

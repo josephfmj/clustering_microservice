@@ -13,6 +13,13 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
+
+/**
+ * Mongo DB Configuration
+ * @author Joseph Rubio
+ * @version
+ * @since
+ */
 @Configuration
 public class MongoConfig {
 

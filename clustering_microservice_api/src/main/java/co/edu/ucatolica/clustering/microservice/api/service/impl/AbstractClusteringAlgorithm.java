@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.edu.ucatolica.clustering.microservice.api.model.RserveResponse;
+import co.edu.ucatolica.clustering.microservice.api.model.RserveResponse.Builder;
 import co.edu.ucatolica.clustering.microservice.api.service.IRserveService;
 
 public abstract class AbstractClusteringAlgorithm {
@@ -29,9 +30,10 @@ public abstract class AbstractClusteringAlgorithm {
 	
 	protected IRserveService rserveService;
 	
-	protected RserveResponse.Builder rServeResponse;	
-	
 	public RserveResponse  callRServeService() {
+		
+		RserveResponse.Builder rServeResponse = Builder
+				.newInstance();
 		
 		try {
 			final String response = rserveService
@@ -53,7 +55,6 @@ public abstract class AbstractClusteringAlgorithm {
 		
 		return rServeResponse.build();
 		
-	}
-	
+	}	
 
 }
